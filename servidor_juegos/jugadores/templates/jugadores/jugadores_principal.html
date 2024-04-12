@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}Jugadores{% endblock %}
+
+{% block content %}
+<div class="px-4 py-2 my-2 text-center">
+    {% load static %}
+    <img class="d-block mx-auto mb-4" src="{% static 'img/jugadores/logo.png' %}" alt="" width="120" height="120">
+    <h1 class="display-5 fw-bold text-body-emphasis">Jugadores</h1>
+    <div class="col-lg-6 mx-auto">
+      <p class="lead mb-4">Los mejores jugadores se dan cita en nuestros juegos para disputar las más trepidantes partidas bien sea a juegos de carreras, shooters o estrategia</p>
+    </div>
+    <div id="botones" class="">
+        <a href="{% url 'jugadores_registro' %}"><button type="button" class="btn btn-light">Registro</button></a>
+        <a href="{% url 'jugadores_login' %}"><button type="button" class="btn btn-light">Login</button></a>
+    </div>
+</div>
+<div class="container">
+    <div class="col-lg-12 mx-auto">
+      <h2 class="text-center">Los mejores</h2>
+    </div>
+  <div class="row">
+        {% for nombre_juego, participaciones in mejores_por_juego.items %}
+        {% if participaciones %}
+            <div class="col-12 col-md-4">
+                {% with name=nombre_juego.split|join:'_'|lower %}
+                <img src='{% static 'img/juegos/'|add:name|add:'/'|add:name|add:'_mini.png' %}' alt="{{ nombre_juego }}" style="width:100%;">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Jugador</th>
+                                {% if nombre_juego == 'Bastions of Dusk' %}
+                                    <th scope="col">Nivel</td>
+                                {% elif nombre_juego == 'Hard Run' %}
+                                    <th scope="col">Tiempo total</td>
+                                {% else %}
+                                    <th scope="col">Puntos</td>
+                                {% endif %}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for participacion in participaciones %}
+                            <tr>
+                                    <td>{{ participacion.jugador.nombre }}</td>
+                                {% if nombre_juego == 'Bastions of Dusk' %}
+                                    <td>{{ participacion.detalles.pantalla }}</td>
+                                {% elif nombre_juego == 'Hard Run' %}
+                                    <td>{{ participacion.detalles.tiempo_total }}</td>
+                                {% else %}
+                                    <td>{{ participacion.detalles.puntos }}</td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% endwith %}
+            </div>
+        {% else %}
+            <div class="col-12 col-md-4">
+                {% with name=nombre_juego.split|join:'_'|lower %}
+                <img src='{% static 'img/juegos/'|add:name|add:'/'|add:name|add:'_mini.png' %}' alt="{{ nombre_juego }}" style="width:100%;">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Jugador</th>
+                                {% if nombre_juego == 'Bastions of Dusk' %}
+                                    <th scope="col">Nivel</td>
+                                {% elif nombre_juego == 'Hard Run' %}
+                                    <th scope="col">Tiempo total</td>
+                                {% else %}
+                                    <th scope="col">Puntos</td>
+                                {% endif %}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for participacion in participaciones %}
+                            <tr>
+                                    <td>{{ participacion.jugador.nombre }}</td>
+                                {% if nombre_juego == 'Bastions of Dusk' %}
+                                    <td>{{ participacion.detalles.pantalla }}</td>
+                                {% elif nombre_juego == 'Hard Run' %}
+                                    <td>{{ participacion.detalles.tiempo_total }}</td>
+                                {% else %}
+                                    <td>{{ participacion.detalles.puntos }}</td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% endwith %}
+            </div>
+        {% endif %}
+        {% endfor %}
+  </div>
+</div>
+
+
+{% endblock %}
