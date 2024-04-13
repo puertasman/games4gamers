@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Registro nuevo usuario{% endblock %}
+{% block extra_head %}<script>
+        window.onload = function() {
+            document.getElementById("id_username").focus();
+        };
+    </script>{% endblock %}
+{% block content %}
+<div class="px-4 py-2 my-2 text-center">
+    {% load static %}
+    <img class="d-block mx-auto mb-4" src="{% static 'img/jugadores/logo.png' %}" alt="" width="120" height="120">
+    <h1>Registro de usuario</h1>
+    <form method="POST">
+        {% csrf_token %}
+
+        {{ formulario.as_p }}
+        <button type="submit" class="btn btn-light btn-lg btn-block">Registro</button>
+    </form>
+    <div class="border-top pt-3 mt-5">
+        <small class="text-muted">
+            ¿Ya tienes? <a href="{% url 'jugadores_login' %}">Log in</a>
+        </small>
+    </div>
+</div>
+{% endblock %}

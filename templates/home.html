@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+{% load static %}
+<div class="px-4 py-2 mt-2 text-center">
+    <h1 class="display-5 fw-bold text-body-emphasis">Games 4 Gamers</h1>
+</div>
+<div class="container-fluid p-0 d-flex justify-content-center" style="background: black ;">
+    <img src="{% static 'img/generales/games_for_gamers.webp' %}" class="full-width-img-center" alt="coche y armas con el titulo Games 4 gamers">
+</div>
+<div class="px-4 py-2 mt-2 text-center">
+    <h3 class="display-5 fw-bold text-body-emphasis">Esta es la página hecha por jugadores y para jugadores, un juego de cada estilo con torneos atractivos para poder mantenerte al corriente de lo que hacen tus rivales y poder ver sus estadísticas.</h3>
+</div>
+
+{% endblock %}
