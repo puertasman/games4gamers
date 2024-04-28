@@ -22,18 +22,19 @@ def jugadores_principal(request):
 
 def jugador_info(request,id):
     # pedimos el objeto a la base de datos
+    juegos_y_participaciones = []
     user = get_object_or_404(User, id=id)  # Si no lo encuentra envía a la página 404
     # retornamos una http con la plantilla jugador.html y el objeto de la base de datos
     juegos = Juego.objects.all()
     jugador = Jugadores.objects.get(nombre=request.user)
     # creo una lista con la información del juego para el jugador
-    datos_especificos_del_juego = {
-        1: {'nombre': 'Hard Run', 'detalles': 'Detalles del Juego 1', 'otra_info': 'Más info del Juego 1'},
-    }
+    for juego in juegos:
+        # Aquí necesitas definir cómo se obtienen los 'detalles' para cada juego
+        detalles = "Ejemplo de detalles para el juego"  # Esto debería ser dinámico
 
         # Añade un diccionario con la información del juego y los detalles de la participación
         juegos_y_participaciones.append({
-            'juego': juego,
+            'juego': juego.nombre,
             'detalles': detalles,
         })
 
