@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
-{% block title %}Jugador - {{jugador.username.capitalize}}{% endblock %}
+{% block title %}Jugador - {{user.username.capitalize}}{% endblock %}
 
 {% block content %}
 {% load static %}
 <div class="container">
     <div class="row justify-content-center">
         <div class="mt-5 text-center">
-          <h1>Bienvenido {{jugador.username}}</h1>
+          <h1>Bienvenido {{user.username}}</h1>
           <form action="{% url 'logout' %}" method="post">
             {% csrf_token %}
             <button type="submit">Cerrar sesión</button>
