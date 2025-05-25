@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}{{ torneo.nombre }}{% endblock %}
+
+{% block content %}
+{% load static %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4">
+            {% if torneo.juego.imagen %}
+                <img src="{% static torneo.juego.imagen %}" class="img-fluid rounded" alt="Imagen de {{ torneo.juego.nombre }}">
+            {% else %}
+                <img src="{% static 'img/juegos/default_game.png' %}" class="img-fluid rounded" alt="Imagen por defecto">
+            {% endif %}
+        </div>
+        <div class="col-md-8">
+            <h2>{{ torneo.nombre }}</h2>
+            <p><strong>Juego:</strong> {{ torneo.juego.nombre }}</p>
+            <p><strong>Descripción:</strong> {{ torneo.descripcion|linebreaksbr }}</p>
+            <p><strong>Fecha de Inicio:</strong> {{ torneo.fecha_inicio|date:"d M Y, H:i" }}</p>
+            <p><strong>Fecha de Fin:</strong> {{ torneo.fecha_fin|date:"d M Y, H:i" }}</p>
+            <p><strong>Estado:</strong> {{ torneo.get_estado_display }}</p>
+            <p><strong>Participantes:</strong> {{ torneo.inscripciones.count }} / {% if torneo.max_participantes == 0 %}Sin límite{% else %}{{ torneo.max_participantes }}{% endif %}</p>
+
+            <!-- Registration Button Logic -->
+            {% if request.user.is_authenticated %}
+                {% if torneo.estado == 'PROXIMAMENTE' or torneo.estado == 'ACTIVO' %}
+                    {% if usuario_registrado %}
+                        <p class="alert alert-success">Ya estás inscrito en este torneo.</p>
+                    {% else %}
+                        {% if torneo.max_participantes == 0 or torneo.inscripciones.count < torneo.max_participantes %}
+                            <a href="{% url 'inscribir_torneo' torneo.id %}" class="btn btn-primary">Inscribirse</a>
+                        {% else %}
+                            <p class="alert alert-warning">Inscripciones completas.</p>
+                        {% endif %}
+                    {% endif %}
+                {% else %}
+                    <p class="alert alert-info">Las inscripciones para este torneo están cerradas.</p>
+                {% endif %}
+            {% else %}
+                <p class="alert alert-info">Debes <a href="{% url 'jugadores_login' %}?next={{ request.path }}">iniciar sesión</a> para inscribirte.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <hr class="my-4">
+
+    <div class="row">
+        <div class="col">
+            <h3>Jugadores Inscritos ({{ inscripciones.count }})</h3>
+            {% if inscripciones %}
+                <ul class="list-group">
+                    {% for inscripcion in inscripciones %}
+                        <li class="list-group-item">{{ inscripcion.jugador.nombre.username|capfirst }} - Inscrito el: {{ inscripcion.fecha_inscripcion|date:"d M Y" }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No hay jugadores inscritos todavía.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a href="{% url 'torneos_principal' %}" class="btn btn-secondary">&laquo; Volver a la lista de torneos</a>
+    </div>
+</div>
+{% endblock %}
