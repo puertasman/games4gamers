@@ -20,79 +20,44 @@
       <h2 class="text-center">Los mejores</h2>
     </div>
   <div class="row">
-        {% for nombre_juego, participaciones in mejores_por_juego.items %}
-        {% if participaciones %}
-            <div class="col-12 col-md-4">
-                {% with name=nombre_juego.split|join:'_'|lower %}
-                <img src='{% static 'img/juegos/'|add:name|add:'/'|add:name|add:'_mini.png' %}' alt="{{ nombre_juego }}" style="width:100%;">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Jugador</th>
-                                {% if nombre_juego == 'Bastions of Dusk' %}
-                                    <th scope="col">Nivel</td>
-                                {% elif nombre_juego == 'Hard Run' %}
-                                    <th scope="col">Tiempo total</td>
-                                {% else %}
-                                    <th scope="col">Puntos</td>
-                                {% endif %}
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for participacion in participaciones %}
-                            <tr>
-                                    <td>{{ participacion.jugador.nombre }}</td>
-                                {% if nombre_juego == 'Bastions of Dusk' %}
-                                    <td>{{ participacion.detalles.pantalla }}</td>
-                                {% elif nombre_juego == 'Hard Run' %}
-                                    <td>{{ participacion.detalles.tiempo_total }}</td>
-                                {% else %}
-                                    <td>{{ participacion.detalles.puntos }}</td>
-                                {% endif %}
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                {% endwith %}
-            </div>
-        {% else %}
-            <div class="col-12 col-md-4">
-                {% with name=nombre_juego.split|join:'_'|lower %}
-                <img src='{% static 'img/juegos/'|add:name|add:'/'|add:name|add:'_mini.png' %}' alt="{{ nombre_juego }}" style="width:100%;">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Jugador</th>
-                                {% if nombre_juego == 'Bastions of Dusk' %}
-                                    <th scope="col">Nivel</td>
-                                {% elif nombre_juego == 'Hard Run' %}
-                                    <th scope="col">Tiempo total</td>
-                                {% else %}
-                                    <th scope="col">Puntos</td>
-                                {% endif %}
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for participacion in participaciones %}
-                            <tr>
-                                    <td>{{ participacion.jugador.nombre }}</td>
-                                {% if nombre_juego == 'Bastions of Dusk' %}
-                                    <td>{{ participacion.detalles.pantalla }}</td>
-                                {% elif nombre_juego == 'Hard Run' %}
-                                    <td>{{ participacion.detalles.tiempo_total }}</td>
-                                {% else %}
-                                    <td>{{ participacion.detalles.puntos }}</td>
-                                {% endif %}
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                {% endwith %}
-            </div>
-        {% endif %}
-        {% endfor %}
+    {% for juego, participaciones_list in mejores_por_juego.items %}
+      <div class="col-12 col-md-4 mb-4 d-flex align-items-stretch">
+        <div class="card w-100">
+          <img src="{% static juego.imagen %}" class="card-img-top" alt="Imagen de {{ juego.nombre }}" style="height: 200px; object-fit: cover;">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title text-center">{{ juego.nombre }}</h5>
+            {% if participaciones_list %}
+              <table class="table table-sm">
+                <thead>
+                  <tr>
+                    <th scope="col">Jugador</th>
+                    {% for key in participaciones_list.0.detalles.keys %}
+                      <th scope="col">{{ key|capfirst }}</th>
+                    {% endfor %}
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for participacion in participaciones_list %}
+                    <tr>
+                      <td>{{ participacion.jugador.nombre.username|capfirst }}</td>
+                      {% for key, value in participacion.detalles.items %}
+                        <td>{{ value }}</td>
+                      {% endfor %}
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            {% else %}
+              <p class="text-center mt-auto">No hay participaciones registradas para este juego.</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <div class="col">
+        <p class="text-center">No hay juegos disponibles o no se encontraron participaciones.</p>
+      </div>
+    {% endfor %}
   </div>
 </div>
 

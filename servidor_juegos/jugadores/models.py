@@ -26,14 +26,8 @@ class Jugadores(models.Model):
 class Participaciones(models.Model):
     jugador = models.ForeignKey(Jugadores, on_delete=models.CASCADE)
     juego = models.ForeignKey(Juego, on_delete=models.CASCADE)
-    detalles = models.JSONField(null=True)
+    detalles = models.JSONField(null=True, blank=True)
     # coge las claves primarias de jugadores y juego
-    if juego == 1:
-        detalles = models.JSONField(default=lambda: {"nivel": 0, "pantalla": "1.1"})
-    elif juego == 2:
-        detalles = models.JSONField(default=lambda: {})
-    elif juego == 3:
-        detalles = models.JSONField(default=lambda: {"kills": 0, "killed": 0, "nivel": 0, "puntos": 0})
     # nivel y pantalla por defecto
 
     class Meta:

@@ -8,6 +8,7 @@ class Juego(models.Model):
     descripcion = models.TextField()
     fecha_de_lanzamiento = models.DateField()
     genero = models.CharField(max_length=50)
+    imagen = models.CharField(max_length=255, default='img/juegos/default_game.png', null=True, blank=True)
 
     def __str__(self):
         return self.nombre

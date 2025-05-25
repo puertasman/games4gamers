@@ -1,54 +1,53 @@
 {% extends "base.html" %}
 
-{% block title %}Jugador - {{jugador.username.capitalize}}{% endblock %}
+{% block title %}Jugador - {{ jugador_user.username|capfirst }}{% endblock %}
 
 {% block content %}
 {% load static %}
 <div class="container">
     <div class="row justify-content-center">
         <div class="mt-5 text-center">
-          <h1>Bienvenido {{jugador.username}}</h1>
+          <h1>Bienvenido {{ jugador_user.username|capfirst }}</h1>
+          <p>Nivel de Jugador: {{ jugador_profile.nivel }}</p>
           <form action="{% url 'logout' %}" method="post">
             {% csrf_token %}
-            <button type="submit">Cerrar sesión</button>
+            <button type="submit" class="btn btn-danger">Cerrar sesión</button>
           </form>
       </div>
-      <div class="col mt-5 text-center">
-          <div class="row">
-            {% for juego in juegos %}
-                <div class="col-lg-4 mt-3">
-                    <div class="card">
-                        {% with name=juego.nombre.split|join:'_'|lower %}
-                        <img src='{% static 'img/juegos/'|add:name|add:'/'|add:name|add:'_mini.png' %}' alt="{{ juego.nombre }}" style="width:100%;">
-                        {% endwith %}
-
-                        <div class="card-body">
-                            <h5 class="card-title">{{ juego.nombre }}</h5>
-                                {% if juego.id == 1 %}
-                                    <p>Detalles de tus datos:</p>
-                            {{ participaciones_por_juego}}
-                                    <p>Circuitos superados: {{ participaciones.detalles.circuitos }}</p>
-                                    <p>Tiempo total: {{ participaciones.detalles.tiempo_total }}</p>
-                                {% elif juego.id == 2 %}
-                                    <p>Detalles de tus datos:</p>
-                                    <p>Nivel: {{ participaciones.detalles.nivel }}</p>
-                                    <p>Puntos: {{ participaciones.detalles.puntos }}</p>
-                                    <p>Kills: {{ participaciones.detalles.kills }}</p>
-                                    <p>Killed: {{ participaciones.detalles.killed }}</p>
-                                {% elif juego.id == 3 %}
-                                    <p>Detalles de tus datos</p>
-                                    <p>Nivel: {{ participaciones.detalles.nivel }}</p>
-                                    <p>Pantalla: {{ participaciones.detalles.pantalla }}</p>
-                                {% else %}
-                                    <p>No estás inscrito en este juego.</p>
-                                    <a href="{% url 'inscribir-juego' juego.id %}" class="btn btn-light mx-auto">Activar</a>
+    </div>
+    <div class="row mt-4">
+        <div class="col text-center">
+            <h2>Mis Juegos</h2>
+        </div>
+    </div>
+    <div class="row">
+        {% for item in juegos_participaciones_data %}
+            <div class="col-lg-4 mt-3 d-flex align-items-stretch">
+                <div class="card w-100">
+                    <img src="{% static item.juego.imagen %}" class="card-img-top" alt="Imagen de {{ item.juego.nombre }}" style="height: 200px; object-fit: cover;">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ item.juego.nombre }}</h5>
+                        {% if item.participacion %}
+                            <p><strong>Detalles de tu participación:</strong></p>
+                            {% if item.participacion.detalles %}
+                                {% for key, value in item.participacion.detalles.items %}
+                                    <p class="card-text mb-1">{{ key|capfirst }}: {{ value }}</p>
+                                {% endfor %}
+                            {% else %}
+                                <p class="card-text mb-1">No hay detalles específicos para mostrar.</p>
                             {% endif %}
-                        </div>
+                        {% else %}
+                            <p>No estás inscrito en este juego.</p>
+                            <a href="{% url 'inscribir-juego' item.juego.id %}" class="btn btn-primary mt-auto">Activar</a>
+                        {% endif %}
                     </div>
                 </div>
-            {% endfor %}
-          </div>
-      </div>
+            </div>
+        {% empty %}
+            <div class="col">
+                <p>No hay juegos disponibles en este momento.</p>
+            </div>
+        {% endfor %}
     </div>
  </div>
 {% endblock %}

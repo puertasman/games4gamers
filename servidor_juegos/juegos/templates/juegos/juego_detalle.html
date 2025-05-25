@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}{{ juego.nombre }}{% endblock %}
+
+{% block content %}
+{% load static %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4">
+            <img src="{% static juego.imagen %}" class="img-fluid rounded" alt="Imagen de {{ juego.nombre }}">
+        </div>
+        <div class="col-md-8">
+            <h2>{{ juego.nombre }}</h2>
+            <p><strong>Descripción:</strong> {{ juego.descripcion }}</p>
+            <p><strong>Fecha de lanzamiento:</strong> {{ juego.fecha_de_lanzamiento }}</p>
+            <p><strong>Género:</strong> {{ juego.genero }}</p>
+            <a href="{% url 'juegos_principal' %}" class="btn btn-primary">Volver a la lista de juegos</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
